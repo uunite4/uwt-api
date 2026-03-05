@@ -1,13 +1,22 @@
 import express from "express";
 import { createUser } from "../db/dbHandler.js";
+import md5 from "../md5hash.js";
 
 const router = express.Router();
 
 router.post("/users", async (req, res, next) => {
   try {
-    const { email } = req.body;
+    const { email, password } = req.body;
+
+    // EMAIL AND PASS CHECK
     if (!email) {
       const err = new Error("Email required");
+      err.status = 400;
+      return next(err);
+    }
+
+    if (!password) {
+      const err = new Error("Password required");
       err.status = 400;
       return next(err);
     }
@@ -23,7 +32,7 @@ router.post("/users", async (req, res, next) => {
     }
 
     // Call the DB function
-    const { userId, apiKey } = await createUser(db, email);
+    const { userId, apiKey } = await createUser(db, email, password);
 
     // Create session
     req.session.userId = userId;
@@ -37,9 +46,17 @@ router.post("/users", async (req, res, next) => {
 
 router.post("/login", async (req, res, next) => {
   try {
-    const { email } = req.body;
+    const { email, password } = req.body;
+
+    // EMAIL AND PASS CHECK
     if (!email) {
       const err = new Error("Email required");
+      err.status = 400;
+      return next(err);
+    }
+
+    if (!password) {
+      const err = new Error("Password required");
       err.status = 400;
       return next(err);
     }
@@ -53,7 +70,13 @@ router.post("/login", async (req, res, next) => {
       return;
     }
 
-    // User exists → create session
+    // CHECK password
+    if (user.hashedPass !== md5(password)) {
+      res.status(401).json({ error: "Invalid password" });
+      return;
+    }
+
+    // password is fine, create session
     req.session.userId = user.id;
 
     res.status(200).json({ userId: user.id, email: user.email });

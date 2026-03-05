@@ -7,7 +7,7 @@
   </head>
   <body>
     <h1>Login (Existing User)</h1>
-    <p>Enter your email to get started:</p>
+    <p>Enter your email and password to connect:</p>
     <label for="email">Email:</label>
     <input
       type="email"
@@ -16,6 +16,18 @@
       placeholder="youremail@gmail.com"
       required
     />
+    <br />
+    <br />
+    <label for="password">Password:</label>
+    <input
+      type="password"
+      id="password"
+      name="password"
+      placeholder="Enter your password"
+      required
+    />
+    <br />
+    <br />
     <button id="connect">connect</button>
     <p id="error-msg" style="color: red"></p>
     <script src="/js/login.js"></script>

@@ -1,6 +1,6 @@
 import sqlite3 from "sqlite3";
 import { open } from "sqlite";
-import crypto from "crypto";
+import md5 from "../md5hash.js";
 
 export async function openDB() {
   // This opens a connection and creates 'library.db' if it doesn't exist
@@ -14,6 +14,7 @@ export async function openDB() {
     CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         email TEXT UNIQUE,
+        hashedPass TEXT,
         plan TEXT,
         stripeCustomerId TEXT,
         createdAt TEXT
@@ -33,11 +34,11 @@ export async function openDB() {
   return db;
 }
 
-export async function createUser(db, email) {
+export async function createUser(db, email, password) {
   const createdAt = new Date().toISOString();
   await db.run(
-    "INSERT INTO users (email, plan, stripeCustomerId, createdAt) VALUES (?, ?, ?, ?)",
-    [email, "free", null, createdAt],
+    "INSERT INTO users (email, hashedPass, plan, stripeCustomerId, createdAt) VALUES (?, ?, ?, ?, ?)",
+    [email, md5(password), "free", null, createdAt],
   );
   // RETRIEVE USER ID
   const user = await db.get("SELECT * FROM users WHERE email = ?", [email]);
@@ -47,7 +48,7 @@ export async function createUser(db, email) {
 
   // Generate API key (unhashed)
   const unhashedApiKey = createRandomString(32);
-  const hashedApiKey = generateMD5Hash(unhashedApiKey);
+  const hashedApiKey = md5(unhashedApiKey);
 
   await db.run(
     "INSERT INTO apiKeys (userId, hashedKey, usageResetDate) VALUES (?, ?, ?)",
@@ -66,8 +67,4 @@ function createRandomString(length) {
     result += chars.charAt(Math.floor(Math.random() * chars.length));
   }
   return result;
-}
-
-function generateMD5Hash(input) {
-  return crypto.createHash("md5").update(input).digest("hex");
 }

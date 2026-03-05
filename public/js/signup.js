@@ -1,11 +1,20 @@
 const connectBtn = document.getElementById("connect");
 const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
 const errorP = document.getElementById("error-msg");
 
 connectBtn.addEventListener("click", async () => {
+  // EMAIL CHECK
   const email = emailInput.value.trim();
   if (!email) {
     errorP.textContent = "Please enter a valid email address.";
+    return;
+  }
+
+  // PASSWORD CHECK
+  const password = passwordInput.value.trim();
+  if (!password) {
+    errorP.textContent = "Please enter a password.";
     return;
   }
 
@@ -13,7 +22,7 @@ connectBtn.addEventListener("click", async () => {
     const response = await fetch("/db/users", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email }),
+      body: JSON.stringify({ email, password }),
     });
     const data = await response.json();
     if (!response.ok) {
