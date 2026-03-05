@@ -1,15 +1,45 @@
-const apiKeyValidator = (req, res, next) => {
+import md5 from "../md5hash.js";
+
+const apiKeyValidator = async (req, res, next) => {
   const apiKey = req.header("x-api-key");
 
+  // CHECK if API key is present
   if (!apiKey) {
     const err = new Error("API key is missing");
     err.status = 401;
     return next(err);
   }
 
-  // TODO: VALIDATE KEY
+  // HASH it and compare with DB
+  const hashedKey = md5(apiKey);
 
-  next();
+  const db = req.app.locals.db;
+  try {
+    const row = await db.get(
+      "SELECT * FROM apiKeys WHERE hashedKey = ? AND active = 1",
+      [hashedKey],
+    );
+
+    if (!row) {
+      const error = new Error("Invalid API key");
+      error.status = 401;
+      return next(error);
+    }
+
+    // API key is valid, increment usage count
+    const newUsageCount = row.usageCount + 1;
+    await db.run("UPDATE apiKeys SET usageCount = ? WHERE id = ?", [
+      newUsageCount,
+      row.id,
+    ]);
+
+    // MOVE ON TO NEXT MIDDLEWARE / ENDPOINT
+    next();
+  } catch (err) {
+    const error = new Error("Database error");
+    error.status = 500;
+    return next(error);
+  }
 };
 
 export default apiKeyValidator;
