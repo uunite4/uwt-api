@@ -1,11 +1,14 @@
 const userID = sessionStorage.getItem("userId");
-const source = sessionStorage.getItem("source");
+const apikey = sessionStorage.getItem("apiKey");
 
-if (source == "signup") {
-  // Get API key from session storage
-  const apiKey = sessionStorage.getItem("apiKey");
-  document.getElementById("apiKey").textContent = apiKey || "Not Found";
-} else if (source == "login") {
+if (!userID) {
+  // No user ID, Redirect to error page
+  window.location.href = "/error?msg=Unauthorized%20Access";
+}
+
+if (apikey) {
+  document.getElementById("apiKey").textContent = apikey || "Not Found";
+} else {
   document.getElementById("apiKey").textContent =
     "******************************** (Hidden for security)";
 }

@@ -21,4 +21,10 @@ router.get("/dashboard", (req, res) => {
   res.render("dashboard");
 });
 
+// ERROR PAGE
+router.get("/error", (req, res) => {
+  const msg = req.query.msg || "An error occurred";
+  res.render("error", { message: msg });
+});
+
 export default router;
