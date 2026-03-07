@@ -1,4 +1,5 @@
 import express from "express";
+import { rateLimit } from "express-rate-limit";
 
 import apiRouter from "./routes/api.js";
 import pagesRouter from "./routes/pages.js";
@@ -22,16 +23,26 @@ app.set("views", "views");
 // public folder (for js, css and imgs)
 app.use(express.static("public"));
 
+//CONFIG RATE LIMITER
+const limiter = rateLimit({
+  windowMs: 15 * 60000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+});
+
 // MIDDLEWARE
 app.use(express.json({ limit: "10kb" })); // json + limiter
 app.use("/api/", apiKeyValidator); // apikey validation for /api/*
-// add rate limiter HERE
+app.use(limiter);
 app.use(
   // sessions
   session({
     secret: "secret-session-key",
     resave: false,
     saveUninitialized: true,
+    cookie: {
+      httpOnly: true,
+      maxAge: 600000 * 60, // 1 hour
+    },
   }),
 );
 

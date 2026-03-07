@@ -37,9 +37,6 @@ connectBtn.addEventListener("click", async () => {
       return;
     }
 
-    // Store API key is session storage + userID
-    sessionStorage.setItem("userId", data.userId);
-    sessionStorage.setItem("apiKey", data.apiKey);
     // redirect to dashboard
     window.location.href = "/dashboard";
   } catch (err) {

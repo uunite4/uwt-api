@@ -3,15 +3,45 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Pico.css -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2.1.1/css/pico.purple.min.css"
+    />
+
+    <link rel="stylesheet" href="/css/local.css" />
+
     <title>UWT API - Dashboard</title>
   </head>
-  <body>
-    <h1>Dashboard</h1>
-    <p>Your account's Email: <strong id="email"></strong></p>
-    <p>Your API Key: <strong id="apiKey"></strong></p>
-    <p>Your account's Plan: <strong id="plan"></strong></p>
-    <a href="/logout">Logout</a>
+  <body class="center_everything_column">
+    <section>
+      <header>
+        <hgroup class="center_everything_column">
+          <h1>Dashboard</h1>
+          <h3>Welcome to your dashboard!</h3>
+        </hgroup>
+      </header>
 
+      <article class="center_everything_column">
+        <h2>Account Information</h2>
+        <p>Your account's Email: <strong id="email"></strong></p>
+        <p>Your account's Plan: <strong id="plan"></strong></p>
+      </article>
+
+      <article class="center_everything_column">
+        <h2>API Information</h2>
+        <p>Your API Key: <strong id="apiKey"></strong></p>
+      </article>
+      <section class="center_everything_column">
+        <button type="button" id="logout">Logout</button>
+      </section>
+    </section>
+
+    <script>
+      const userId = "<%= userId %>";
+      const apiKey = "<%= apiKey %>";
+    </script>
     <script src="/js/dashboard.js"></script>
   </body>
 </html>

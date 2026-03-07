@@ -3,17 +3,45 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="../public/css/homepage.css" />
+
+    <!-- Pico.css -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2.1.1/css/pico.purple.min.css"
+    />
+
+    <link rel="stylesheet" href="/css/local.css" />
+
     <title>UWT API - Homepage</title>
   </head>
   <body>
-    <h1>UWT API Homepage</h1>
-    <p>
-      The UWT API (Universal Web Tools API) is an API that provides universal
-      web tools for developers, indie hackers and everyone else.
-    </p>
-    <button onclick="window.location.href = '/docs'">DOCS</button>
-    <button onclick="window.location.href = '/login'">Login</button>
-    <button onclick="window.location.href = '/signup'">Sign Up</button>
+    <header>
+      <nav style="justify-content: center; gap: 2em">
+        <a href="/">UWT</a>
+        <a href="/docs">Docs</a>
+        <a href="/login">Login</a>
+        <a href="/signup">Sign Up</a>
+      </nav>
+    </header>
+    <main class="container center_everything_column">
+      <section class="center_everything_column">
+        <hgroup class="center_everything_column">
+          <h1>UWT API</h1>
+          <h3>An api for all your web development needs</h3>
+        </hgroup>
+        <p>
+          UWT (Universal Web Tools) is an API that provides all-around web tools
+          for developers, indie hackers and everyone else.
+        </p>
+        <section>
+          <button onclick="window.location.href = '/docs'">
+            How does the API work?
+          </button>
+          <button class="outline" onclick="window.location.href = '/signup'">
+            Sign up
+          </button>
+        </section>
+      </section>
+    </main>
   </body>
 </html>

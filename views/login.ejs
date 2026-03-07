@@ -3,33 +3,54 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Pico.css -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2.1.1/css/pico.purple.min.css"
+    />
+
+    <link rel="stylesheet" href="/css/local.css" />
+
     <title>UWT API - Login</title>
   </head>
-  <body>
-    <h1>Login (Existing User)</h1>
-    <p>Enter your email and password to connect:</p>
-    <label for="email">Email:</label>
-    <input
-      type="email"
-      id="email"
-      name="email"
-      placeholder="youremail@gmail.com"
-      required
-    />
-    <br />
-    <br />
-    <label for="password">Password:</label>
-    <input
-      type="password"
-      id="password"
-      name="password"
-      placeholder="Enter your password"
-      required
-    />
-    <br />
-    <br />
-    <button id="connect">connect</button>
-    <p id="error-msg" style="color: red"></p>
+  <body class="center_everything_column">
+    <section class="container" style="max-width: 750px">
+      <article>
+        <form>
+          <h1>Login</h1>
+          <p>Enter your email and password to log in:</p>
+          <label for="email">Email:</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="youremail@gmail.com"
+            required
+          />
+          <label for="password">Password:</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Enter your password"
+            required
+          />
+
+          <section class="center_everything_column">
+            <p id="error-msg" class="error_message"></p>
+            <button type="button" id="connect" style="padding-inline: 2rem">
+              Login
+            </button>
+          </section>
+        </form>
+        <footer>
+          <p style="margin-bottom: 0px">
+            Don't have an account? <a href="/signup">Create an account here</a>
+          </p>
+        </footer>
+      </article>
+    </section>
     <script src="/js/login.js"></script>
   </body>
 </html>

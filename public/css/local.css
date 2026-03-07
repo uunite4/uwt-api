@@ -1,0 +1,14 @@
+body {
+  height: 100vh;
+}
+
+.center_everything_column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.error_message {
+  color: var(--pico-del-color);
+}

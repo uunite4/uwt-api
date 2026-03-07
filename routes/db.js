@@ -35,10 +35,16 @@ router.post("/users", async (req, res, next) => {
     const { userId, apiKey } = await createUser(db, email, password);
 
     // Create session
-    req.session.userId = userId;
+    req.session.regenerate((err) => {
+      if (err) {
+        return next(err);
+      }
 
-    // Send back the unhashed key (only shown once!)
-    res.status(201).json({ userId, email, apiKey });
+      req.session.userId = userId;
+      req.session.apiKey = apiKey;
+      // Send back the unhashed key (only shown once!)
+      res.status(201).json({ userId, email, apiKey });
+    });
   } catch (err) {
     next(err);
   }
@@ -76,10 +82,15 @@ router.post("/login", async (req, res, next) => {
       return;
     }
 
-    // password is fine, create session
-    req.session.userId = user.id;
+    // password is fine, destroy old session and create new one
+    req.session.regenerate((err) => {
+      if (err) {
+        return next(err);
+      }
 
-    res.status(200).json({ userId: user.id, email: user.email });
+      req.session.userId = user.id;
+      res.status(200).json({ userId: user.id, email: user.email });
+    });
   } catch (err) {
     next(err);
   }
@@ -97,6 +108,20 @@ router.get("/users/:id", async (req, res, next) => {
     req.params.id,
   ]);
   res.json(user);
+});
+
+router.post("/logout", (req, res, next) => {
+  if (req.session) {
+    req.session.destroy((err) => {
+      if (err) {
+        return next(err);
+      }
+      res.clearCookie("connect.sid");
+      res.status(200).json({ message: "Logged out" });
+    });
+  } else {
+    res.status(200).json({ message: "Logged out" });
+  }
 });
 
 // FOR DEBUGGING ONLY

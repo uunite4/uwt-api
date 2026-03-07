@@ -1,10 +1,6 @@
-const userID = sessionStorage.getItem("userId");
-const apikey = sessionStorage.getItem("apiKey");
-
-if (!userID) {
-  // No user ID, Redirect to error page
-  window.location.href = "/error?msg=Unauthorized%20Access";
-}
+const userID = userId;
+const apikey = apiKey;
+const logoutBtn = document.getElementById("logout");
 
 if (apikey) {
   document.getElementById("apiKey").textContent = apikey || "Not Found";
@@ -20,3 +16,11 @@ fetch("/db/users/" + userID)
     document.getElementById("email").textContent = data.email;
     document.getElementById("plan").textContent = data.plan;
   });
+
+logoutBtn.addEventListener("click", () => {
+  fetch("/db/logout", {
+    method: "POST",
+  }).then(() => {
+    window.location.href = "/";
+  });
+});

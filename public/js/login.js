@@ -41,8 +41,6 @@ connectBtn.addEventListener("click", async () => {
       return;
     }
 
-    // Store user ID in session storage
-    sessionStorage.setItem("userId", data.userId);
     // redirect to dashboard
     window.location.href = "/dashboard";
   } catch (err) {

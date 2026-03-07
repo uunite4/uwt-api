@@ -3,14 +3,35 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Pico.css -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2.1.1/css/pico.purple.min.css"
+    />
+
+    <link rel="stylesheet" href="/css/local.css" />
+
     <title>UWT API - Error</title>
   </head>
-  <body>
-    <h1>Error</h1>
-    <h3>Trying to break my API huh?</h3>
-    <p>Error Message: <%= message %></p>
-    <button onclick="window.location.href = '/'">Home Page</button>
-    <button onclick="window.location.href = '/login'">Login</button>
-    <button onclick="window.location.href = '/signup'">Sign Up</button>
+  <body class="center_everything_column">
+    <section class="container" style="max-width: 750px">
+      <article class="center_everything_column">
+        <hgroup class="center_everything_column">
+          <h1>Error</h1>
+          <h3>Trying to break my API huh?</h3>
+        </hgroup>
+        <p class="error_message">Error Message: <%= message %></p>
+        <section>
+          <button onclick="window.location.href = '/'">Home Page</button>
+          <button class="outline" onclick="window.location.href = '/login'">
+            Login
+          </button>
+          <button class="outline" onclick="window.location.href = '/signup'">
+            Sign Up
+          </button>
+        </section>
+      </article>
+    </section>
   </body>
 </html>
