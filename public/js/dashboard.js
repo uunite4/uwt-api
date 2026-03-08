@@ -9,13 +9,22 @@ if (apikey) {
     "******************************** (Hidden for security)";
 }
 
-// Fetch user email from server
-fetch("/db/users/" + userID)
-  .then((r) => r.json())
-  .then((data) => {
-    document.getElementById("email").textContent = data.email;
-    document.getElementById("plan").textContent = data.plan;
-  });
+async function renderUserInfo() {
+  // Fetch user email from server
+  data = await fetch("/db/users/" + userID);
+  data = await data.json();
+  // Fetch max requsests from env variable
+  const maxRequests = await fetch("/db/maxrequests");
+  const maxData = await maxRequests.json();
+  document.getElementById("email").textContent = data.user.email;
+  document.getElementById("plan").textContent = data.user.plan;
+  document.getElementById("requestsToday").textContent =
+    `${data.apiKey.requestsToday} / ${maxData.free}`;
+  document.getElementById("progress").value = data.apiKey.requestsToday;
+  document.getElementById("progress").max = maxData.free;
+}
+
+renderUserInfo();
 
 logoutBtn.addEventListener("click", () => {
   fetch("/db/logout", {

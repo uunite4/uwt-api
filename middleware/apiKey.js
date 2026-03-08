@@ -26,13 +26,8 @@ const apiKeyValidator = async (req, res, next) => {
       return next(error);
     }
 
-    // API key is valid, increment usage count
-    const newUsageCount = row.usageCount + 1;
-    await db.run("UPDATE apiKeys SET usageCount = ? WHERE id = ?", [
-      newUsageCount,
-      row.id,
-    ]);
-
+    // API key is valid
+    req.apiKeyId = row.id;
     // MOVE ON TO NEXT MIDDLEWARE / ENDPOINT
     next();
   } catch (err) {

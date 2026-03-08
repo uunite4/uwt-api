@@ -4,6 +4,12 @@ import md5 from "../md5hash.js";
 
 const router = express.Router();
 
+/*
+
+FUNCTION: SIGN UP A USER
+ROUTE: POST /db/users
+
+*/
 router.post("/users", async (req, res, next) => {
   try {
     const { email, password } = req.body;
@@ -50,6 +56,12 @@ router.post("/users", async (req, res, next) => {
   }
 });
 
+/*
+
+FUNCTION: LOG IN A USER
+ROUTE: POST /db/login
+
+*/
 router.post("/login", async (req, res, next) => {
   try {
     const { email, password } = req.body;
@@ -96,6 +108,12 @@ router.post("/login", async (req, res, next) => {
   }
 });
 
+/*
+
+FUNCTION: GET ALL USER INFO + API KEY INFO (FOR DASHBOARD)
+ROUTE: GET /db/users/:id
+
+*/
 router.get("/users/:id", async (req, res, next) => {
   if (!req.session.userId || req.session.userId != req.params.id) {
     const err = new Error("Unauthorized");
@@ -104,12 +122,21 @@ router.get("/users/:id", async (req, res, next) => {
   }
 
   const db = req.app.locals.db;
-  const user = await db.get("SELECT email, plan FROM users WHERE id = ?", [
+  const userInfo = await db.get("SELECT email, plan FROM users WHERE id = ?", [
     req.params.id,
   ]);
-  res.json(user);
+  const apiKeyInfo = await db.get("SELECT * FROM apiKeys WHERE userId = ?", [
+    req.params.id,
+  ]);
+  res.json({ user: userInfo, apiKey: apiKeyInfo });
 });
 
+/*
+
+FUNCTION: LOG OUT A USER
+ROUTE: POST /db/logout
+
+*/
 router.post("/logout", (req, res, next) => {
   if (req.session) {
     req.session.destroy((err) => {
@@ -124,7 +151,26 @@ router.post("/logout", (req, res, next) => {
   }
 });
 
-// FOR DEBUGGING ONLY
+/*
+
+FUNCTION: GET MAX REQUESTS INFO (FOR FRONTEND TO DISPLAY USAGE LIMITS)
+ROUTE: GET /db/maxrequests
+
+*/
+router.get("/maxrequests", (req, res) => {
+  res.status(200).json({
+    free: process.env.FREE_PLAN_MAX_USAGE,
+    developer: process.env.DEVELOPER_PLAN_MAX_USAGE,
+    startup: process.env.STARTUP_PLAN_MAX_USAGE,
+  });
+});
+
+/*
+
+FUNCTION: GET ALL DB INFO (FOR DEBUGGING, NOT FOR PRODUCTION)
+ROUTE: GET /db/all
+
+*/
 router.get("/all", async (req, res, next) => {
   try {
     const db = req.app.locals.db;
